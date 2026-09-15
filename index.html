@@ -48,10 +48,10 @@ body.modalOpen .app{transform:scale(1.045)}
 .glass::before{content:"";position:absolute;top:-40%;left:-20%;width:70%;height:90%;pointer-events:none;
   background:radial-gradient(circle,rgba(255,255,255,.55),transparent 65%);opacity:.6;transform:rotate(-12deg);z-index:0}
 .glass>*{position:relative;z-index:1}
-header{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:8px;z-index:20}
-.title{font-size:22.5px;font-weight:700;letter-spacing:-.2px;display:flex;align-items:center;gap:9px}
-.title img{width:34px;height:34px;border-radius:10px;display:block;box-shadow:0 3px 8px rgba(0,0,0,.2)}
-.date{font-size:15.5px;color:var(--text2);margin-top:2px;font-weight:500}
+header{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:8px;z-index:20}
+.title{font-size:18px;font-weight:700;letter-spacing:-.2px;display:flex;align-items:center;gap:7px}
+.title img{width:26px;height:26px;border-radius:8px;display:block;box-shadow:0 3px 8px rgba(0,0,0,.2)}
+.date{font-size:13px;color:var(--text2);margin-top:2px;font-weight:500}
 input.date{border:none;background:transparent;color:var(--text2);font:inherit;padding:0;margin:0;width:auto;max-width:none;display:inline-block;-webkit-appearance:none;cursor:pointer}
 input.date:focus{outline:1px solid var(--blue);border-radius:4px}
 nav{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
@@ -64,12 +64,14 @@ nav button{border:1px solid var(--glassBorder);background:var(--glass);backdrop-
   color:var(--text2);padding:10px 16px;border-radius:999px;font-weight:600;
   font-size:15.5px;cursor:pointer;flex:1 1 auto;text-align:center;white-space:nowrap;transition:transform .12s var(--spring);
   box-shadow:0 4px 12px rgba(31,38,60,.08),inset 0 1px 0 rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;gap:6px}
+.filebtn.small{padding:7px 12px;font-size:13px;flex:0 1 auto}
 nav button:active,.filebtn:active{transform:scale(.95)}
 nav button.navActive{background:var(--blue);color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(0,122,255,.45),inset 0 1px 0 rgba(255,255,255,.4)}
 button{font-family:inherit}
 button.primary{border:1px solid rgba(0,122,255,.55);background:rgba(0,122,255,.20);color:#0050c8;padding:11px 18px;border-radius:16px;font-weight:700;
   font-size:16.5px;cursor:pointer;transition:transform .12s var(--spring),background-color .15s;box-shadow:0 6px 16px rgba(0,122,255,.18),inset 0 1px 0 rgba(255,255,255,.5)}
 button.primary:active{transform:scale(.95);background:rgba(0,122,255,.32)}
+button.primary.small{padding:7px 12px;font-size:13px;border-radius:12px}
 .dangerBtn{border:1px solid rgba(255,59,48,.5);background:rgba(255,59,48,.14);color:#c62b20;padding:6px 12px;
   border-radius:10px;font-weight:600;font-size:15px;cursor:pointer;transition:transform .12s var(--spring),background-color .15s}
 .dangerBtn:active{transform:scale(.94);background:rgba(255,59,48,.26)}
@@ -79,8 +81,8 @@ button.primary:active{transform:scale(.95);background:rgba(0,122,255,.32)}
 .view{display:none}
 .view.active{display:block;animation:viewIn .32s var(--ease)}
 @keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.iconBadge{width:30px;height:30px;min-width:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
-  font-size:17.5px;box-shadow:0 3px 8px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.5);color:#fff}
+.iconBadge{width:24px;height:24px;min-width:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  font-size:14px;box-shadow:0 3px 8px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.5);color:#fff}
 .iconBadge.pink{background:linear-gradient(160deg,#ff8ac0,#ff5da2)}
 .iconBadge.blue{background:linear-gradient(160deg,#5ac8fa,#0a84ff)}
 .iconBadge.green{background:linear-gradient(160deg,#6fe08a,#27ae5f)}
@@ -88,19 +90,19 @@ button.primary:active{transform:scale(.95);background:rgba(0,122,255,.32)}
 .iconBadge.orange{background:linear-gradient(160deg,#ffb04d,#ff8c00)}
 .iconBadge.gray{background:linear-gradient(160deg,#a7abb3,#7d818a)}
 .iconBadge.red{background:linear-gradient(160deg,#ff8a80,#ff3b30)}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px;align-items:stretch}
-.card{padding:13px;display:flex;align-items:center;gap:10px;min-height:74px;box-sizing:border-box}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px;align-items:stretch}
+.card{padding:9px;display:flex;align-items:center;gap:7px;min-height:56px;box-sizing:border-box}
 .card .cardText{display:flex;flex-direction:column;justify-content:center;min-width:0;flex:1}
-.label{font-size:13px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.2px;line-height:1.25}
-.value{font-size:19px;font-weight:700;margin-top:2px;color:var(--text);line-height:1.2}
-.section{margin:10px 0;padding:16px;overflow:auto}
-.section h2{margin:0 0 10px;font-size:18px;font-weight:700;letter-spacing:-.1px;display:flex;align-items:center;gap:8px}
+.label{font-size:10.5px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.2px;line-height:1.2}
+.value{font-size:14.5px;font-weight:700;margin-top:2px;color:var(--text);line-height:1.15}
+.section{margin:8px 0;padding:12px;overflow:auto}
+.section h2{margin:0 0 8px;font-size:15px;font-weight:700;letter-spacing:-.1px;display:flex;align-items:center;gap:6px}
 table{border-collapse:collapse;border-spacing:0;width:auto}
-.prodTabs{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.prodTabs{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
 .prodTabBtn{border:1px solid var(--glassBorder);background:var(--glass);backdrop-filter:saturate(160%);
-  color:var(--text2);padding:8px 14px;border-radius:999px;font-weight:600;
-  font-size:15.5px;cursor:pointer;flex:1 1 auto;transition:background-color .2s var(--ease),color .2s var(--ease),transform .12s var(--spring);
-  box-shadow:0 3px 10px rgba(31,38,60,.08),inset 0 1px 0 rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;gap:6px}
+  color:var(--text2);padding:6px 10px;border-radius:999px;font-weight:600;
+  font-size:12.5px;cursor:pointer;flex:1 1 auto;transition:background-color .2s var(--ease),color .2s var(--ease),transform .12s var(--spring);
+  box-shadow:0 3px 10px rgba(31,38,60,.08),inset 0 1px 0 rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;gap:4px}
 .prodTabBtn:active{transform:scale(.95)}
 .prodTabBtn.active{background:var(--blue);color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(0,122,255,.4),inset 0 1px 0 rgba(255,255,255,.4)}
 .prodGrid{position:relative}
@@ -133,9 +135,11 @@ table{border-collapse:collapse;border-spacing:0;width:auto}
 .saveBtn{border:1px solid rgba(52,199,89,.55);background:rgba(52,199,89,.85);color:#fff;padding:11px 16px;border-radius:16px;font-weight:700;
   font-size:16px;cursor:pointer;transition:transform .12s var(--spring),background-color .15s;box-shadow:0 6px 16px rgba(52,199,89,.3),inset 0 1px 0 rgba(255,255,255,.3);white-space:nowrap}
 .saveBtn:active{transform:scale(.95)}
+.saveBtn.small{padding:7px 12px;font-size:13px;border-radius:12px}
 .clearBtn{border:1px solid rgba(201,121,26,.55);background:rgba(201,121,26,.14);color:#8a5a13;padding:11px 16px;border-radius:16px;font-weight:700;
   font-size:16px;cursor:pointer;transition:transform .12s var(--spring),background-color .15s;white-space:nowrap}
 .clearBtn:active{transform:scale(.95);background:rgba(201,121,26,.24)}
+.clearBtn.small{padding:7px 12px;font-size:13px;border-radius:12px}
 .saveToast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(20px);z-index:60;
   background:rgba(30,32,38,.88);color:#fff;font-size:15.5px;font-weight:600;padding:8px 16px;border-radius:999px;
   box-shadow:0 8px 20px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
@@ -240,15 +244,7 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 </div>
 <div id="saveToast" class="saveToast">✓ Saved</div>
 <div class="app">
-<header class="glass"><div><div class="title"><img src="icon-192.png" alt=""> STAR SHOP</div><div class="date">Working day: <input type="date" class="date" id="workDateInput" onchange="changeWorkDate(this.value)"></div><div id="syncBadge" class="syncBadge offline">📴 Local only</div> <span id="unsavedBadge" class="syncBadge unsaved" style="display:none">● Saving…</span></div><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="saveBtn" onclick="manualSave()">💾 Save</button><button type="button" class="clearBtn" onclick="clearDay()">🧹 Clear</button><button type="button" class="primary" onclick="closeDay()">SAVE TO HISTORY</button></div></header>
-<nav>
-<button type="button" class="navActive" data-view="daily" onclick="show('daily')"><span class="iconBadge blue">🏠</span>Daily Sale</button>
-<button type="button" data-view="history" onclick="show('history')"><span class="iconBadge orange">🕘</span>History</button>
-<button type="button" data-view="analytics" onclick="show('analytics')"><span class="iconBadge purple">📊</span>Analytics</button>
-<button type="button" data-view="settings" onclick="show('settings')"><span class="iconBadge gray">⚙️</span>Products / Prices</button>
-<label class="filebtn"><span class="iconBadge green">📥</span>Import Excel <input id="excel" type="file" accept=".xlsx,.xls,.csv" hidden></label>
-<button type="button" class="filebtn" onclick="exportBackupExcel()"><span class="iconBadge orange">📤</span>Export Backup</button>
-</nav>
+<header class="glass"><div><div class="title"><img src="icon-192.png" alt=""> STAR SHOP</div><div class="date">Working day: <input type="date" class="date" id="workDateInput" onchange="changeWorkDate(this.value)"></div><div id="syncBadge" class="syncBadge offline">📴 Local only</div> <span id="unsavedBadge" class="syncBadge unsaved" style="display:none">● Saving…</span></div></header>
 <div class="dock">
 <button type="button" data-view="daily" onclick="show('daily')"><span class="dockIcon">🏠</span>Home</button>
 <button type="button" data-view="history" onclick="show('history')"><span class="dockIcon">🕘</span>History</button>
@@ -258,13 +254,6 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 </div>
 
 <section id="daily" class="view active">
-<div class="cards">
-<div class="card glass"><span class="iconBadge blue">💰</span><div class="cardText"><div class="label">Today's Sales</div><div class="value" id="totalSales">0 AFN</div></div></div>
-<div class="card glass"><span class="iconBadge green">📈</span><div class="cardText"><div class="label">Today's Profit</div><div class="value" id="totalProfit">0 AFN</div></div></div>
-<div class="card glass"><span class="iconBadge purple">🧾</span><div class="cardText"><div class="label">Sales Entries</div><div class="value" id="entryCount">0</div></div></div>
-<div class="card glass"><span class="iconBadge orange">📅</span><div class="cardText"><div class="label">Current Date</div><div class="value" id="dateCard"></div></div></div>
-</div>
-
 <div class="prodTabs">
 <button type="button" class="prodTabBtn active" data-tab="soap" onclick="showProd('soap')"><span class="iconBadge pink">🧼</span>Soap</button>
 <button type="button" class="prodTabBtn" data-tab="wasleen" onclick="showProd('wasleen')"><span class="iconBadge blue">🫧</span>Wasleen</button>
@@ -303,6 +292,14 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 <section id="history" class="view"><div class="section glass"><h2>📚 Saved Days (unlimited)</h2><div id="historyList"></div></div><div id="detail"></div></section>
 
 <section id="analytics" class="view">
+<div class="section glass"><h2>🧾 Today's Snapshot</h2>
+<div class="cards">
+<div class="card glass"><span class="iconBadge blue">💰</span><div class="cardText"><div class="label">Today's Sales</div><div class="value" id="totalSales">0 AFN</div></div></div>
+<div class="card glass"><span class="iconBadge green">📈</span><div class="cardText"><div class="label">Today's Profit</div><div class="value" id="totalProfit">0 AFN</div></div></div>
+<div class="card glass"><span class="iconBadge purple">🧾</span><div class="cardText"><div class="label">Sales Entries</div><div class="value" id="entryCount">0</div></div></div>
+<div class="card glass"><span class="iconBadge orange">📅</span><div class="cardText"><div class="label">Current Date</div><div class="value" id="dateCard"></div></div></div>
+</div>
+</div>
 <div class="section glass"><h2>📅 Date Range</h2>
 <div class="chips" id="rangeChips">
   <div class="chip chipActive" data-r="7" onclick="setRange('7')">Last 7 Days</div>
@@ -327,7 +324,15 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 <div class="section glass"><h2 id="prodTotalsTitle">Per-Product Totals</h2><div id="analyticsProducts"></div><div class="prodBarChart" id="analyticsProductsChart"></div></div>
 </section>
 
-<section id="settings" class="view"><div class="section glass"><h2>⚙ Product / Price Settings</h2>
+<section id="settings" class="view">
+<div class="section glass"><h2>💾 Day Actions</h2>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="saveBtn small" onclick="manualSave()">💾 Save</button><button type="button" class="clearBtn small" onclick="clearDay()">🧹 Clear</button><button type="button" class="primary small" onclick="closeDay()">Save to History</button></div>
+</div>
+<div class="section glass"><h2>📂 Import / Export</h2>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><label class="filebtn small"><span class="iconBadge green">📥</span>Import Excel <input id="excel" type="file" accept=".xlsx,.xls,.csv" hidden></label>
+<button type="button" class="filebtn small" onclick="exportBackupExcel()"><span class="iconBadge orange">📤</span>Export Backup</button></div>
+</div>
+<div class="section glass"><h2>⚙ Product / Price Settings</h2>
 <p>These are defaults for the current day's calculations. Each row stores its own A Price, so changing settings later will not change old days.</p>
 <div class="grid2"><div>Soap default A Price<input id="setSoap" type="number" step=".01"></div><div>Surf default A Price<input id="setSurf" type="number" step=".01"></div><div>Wasleen A Price / KG<input id="setWasleen" type="number" step=".01"></div><div>Shampoo first 20 A Price / L<input id="setSh10" type="number" step=".01" value="5"></div><div>Shampoo second 20 A Price / L<input id="setSh6" type="number" step=".01" value="8"></div></div><br><button type="button" class="primary" onclick="saveSettings()">Save Settings</button>
 <hr><p><b>Excel import:</b> click "Import Excel" above, pick your sheet, then match your columns (Date, Sales, Profit, per-product if you have them). You choose the mapping, so it works with your existing workbook exactly as it is. Imported days are added to History and included in Analytics.</p>
