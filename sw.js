@@ -1,4 +1,4 @@
-const CACHE = 'star-shop-v23';
+const CACHE = 'star-shop-v26';
 const ASSETS = [
   './', './index.html', './manifest.json', './icon-192.png', './icon-512.png',
   'https://cdnjs.cloudflare.com/ajax/libs/firebase/12.16.0/firebase-app-compat.js',
