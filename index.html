@@ -37,7 +37,11 @@ body::before{content:"";position:fixed;inset:-10%;z-index:0;pointer-events:none;
     radial-gradient(circle at 90% 55%, rgba(90,180,255,.55), transparent 34%),
     radial-gradient(circle at 8% 70%, rgba(255,120,175,.5), transparent 32%),
     radial-gradient(circle at 60% 90%, rgba(140,110,255,.5), transparent 34%),
+    radial-gradient(circle at 50% 45%, rgba(20,80,200,.22), transparent 45%),
     linear-gradient(180deg,#d7e2f6,#eef1f6 40%,#f5ecdd);
+}
+body::after{content:"";position:fixed;right:-8%;bottom:-8%;width:70vmin;height:70vmin;z-index:0;pointer-events:none;
+  background:url('logo-badge.png') center/contain no-repeat;opacity:.07;filter:saturate(120%);
 }
 .app{max-width:900px;margin:auto;padding:12px 14px 96px;position:relative;z-index:1;
   transition:transform .38s var(--ease);transform-origin:center 30%}
@@ -52,6 +56,10 @@ header{padding:10px 14px;display:flex;justify-content:space-between;align-items:
 .title{font-size:18px;font-weight:700;letter-spacing:-.2px;display:flex;align-items:center;gap:7px}
 .title img{width:26px;height:26px;border-radius:8px;display:block;box-shadow:0 3px 8px rgba(0,0,0,.2)}
 .date{font-size:13px;color:var(--text2);margin-top:2px;font-weight:500}
+.headerBadge{width:48px;height:48px;border-radius:50%;object-fit:cover;box-shadow:0 3px 10px rgba(10,50,120,.25);flex-shrink:0}
+.lockBadge{cursor:pointer}
+body.profitLocked .profitVal{filter:blur(5px);user-select:none;transition:filter .2s}
+.pinInputField{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--sep);font-size:16px;margin-top:2px;box-sizing:border-box;letter-spacing:2px}
 input.date{border:none;background:transparent;color:var(--text2);font:inherit;padding:0;margin:0;width:auto;max-width:none;display:inline-block;-webkit-appearance:none;cursor:pointer}
 input.date:focus{outline:1px solid var(--blue);border-radius:4px}
 nav{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
@@ -244,7 +252,7 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 </div>
 <div id="saveToast" class="saveToast">✓ Saved</div>
 <div class="app">
-<header class="glass"><div><div class="title"><img src="icon-192.png" alt=""> STAR SHOP</div><div class="date">Working day: <input type="date" class="date" id="workDateInput" onchange="changeWorkDate(this.value)"></div><div id="syncBadge" class="syncBadge offline">📴 Local only</div> <span id="unsavedBadge" class="syncBadge unsaved" style="display:none">● Saving…</span></div></header>
+<header class="glass"><div><div class="title"><img src="icon-192.png" alt=""> STAR SHOP</div><div class="date">Working day: <input type="date" class="date" id="workDateInput" onchange="changeWorkDate(this.value)"></div><div id="syncBadge" class="syncBadge offline">📴 Local only</div> <span id="unsavedBadge" class="syncBadge unsaved" style="display:none">● Saving…</span> <span id="lockBadge" class="syncBadge lockBadge" style="display:none" onclick="toggleProfitLock()">🔒 Locked</span></div><img class="headerBadge" src="logo-badge.png" alt="Star Shampoo and Wasleen Factory"></header>
 <div class="dock">
 <button type="button" data-view="daily" onclick="show('daily')"><span class="dockIcon">🏠</span>Home</button>
 <button type="button" data-view="history" onclick="show('history')"><span class="dockIcon">🕘</span>History</button>
@@ -278,12 +286,12 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 </div>
 
 <div class="section glass"><h2>💵 Daily Totals & Expenses</h2><div class="totals">
-<div class="card glass"><span class="iconBadge pink">🧼</span><div class="cardText"><div class="label">Soap Sales</div><div class="value" id="soapSales">0</div><div class="small" id="soapProfit">Profit 0</div></div></div>
-<div class="card glass"><span class="iconBadge blue">🫧</span><div class="cardText"><div class="label">Wasleen Sales</div><div class="value" id="wasleenSales">0</div><div class="small" id="wasleenProfit">Profit 0</div></div></div>
-<div class="card glass"><span class="iconBadge green">🧴</span><div class="cardText"><div class="label">Shampoo Sales</div><div class="value" id="shampooSales">0</div><div class="small" id="shampooProfit">Profit 0</div></div></div>
-<div class="card glass"><span class="iconBadge purple">🧽</span><div class="cardText"><div class="label">Surf Sales</div><div class="value" id="surfSales">0</div><div class="small" id="surfProfit">Profit 0</div></div></div>
-<div class="card glass"><span class="iconBadge gray">📦</span><div class="cardText"><div class="label">Others Sales</div><div class="value" id="otherSales">0</div><div class="small" id="otherProfit">Profit 0</div></div></div>
-<div class="card glass"><span class="iconBadge orange">🌾</span><div class="cardText"><div class="label">Farm Sales</div><div class="value" id="farmSales">0</div><div class="small" id="farmProfit">Profit 0</div></div></div>
+<div class="card glass"><span class="iconBadge pink">🧼</span><div class="cardText"><div class="label">Soap Sales</div><div class="value" id="soapSales">0</div><div class="small profitVal" id="soapProfit">Profit 0</div></div></div>
+<div class="card glass"><span class="iconBadge blue">🫧</span><div class="cardText"><div class="label">Wasleen Sales</div><div class="value" id="wasleenSales">0</div><div class="small profitVal" id="wasleenProfit">Profit 0</div></div></div>
+<div class="card glass"><span class="iconBadge green">🧴</span><div class="cardText"><div class="label">Shampoo Sales</div><div class="value" id="shampooSales">0</div><div class="small profitVal" id="shampooProfit">Profit 0</div></div></div>
+<div class="card glass"><span class="iconBadge purple">🧽</span><div class="cardText"><div class="label">Surf Sales</div><div class="value" id="surfSales">0</div><div class="small profitVal" id="surfProfit">Profit 0</div></div></div>
+<div class="card glass"><span class="iconBadge gray">📦</span><div class="cardText"><div class="label">Others Sales</div><div class="value" id="otherSales">0</div><div class="small profitVal" id="otherProfit">Profit 0</div></div></div>
+<div class="card glass"><span class="iconBadge orange">🌾</span><div class="cardText"><div class="label">Farm Sales</div><div class="value" id="farmSales">0</div><div class="small profitVal" id="farmProfit">Profit 0</div></div></div>
 <div class="card glass"><span class="iconBadge red">🏠</span><div class="cardText"><div class="label">Rent (daily, auto)</div><input id="rentInput" type="number" step="0.01" placeholder="0"></div></div>
 <div class="card glass"><span class="iconBadge gray">🧮</span><div class="cardText"><div class="label">Expenses</div><input id="expenses" type="number" step="0.01" placeholder="0"></div></div>
 </div><p class="small">Rent is set once and deducted automatically every day from then on. Changing it only changes today onward — days already saved to History keep the rent that applied when they were closed.</p></div>
@@ -295,7 +303,7 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 <div class="section glass"><h2>🧾 Today's Snapshot</h2>
 <div class="cards">
 <div class="card glass"><span class="iconBadge blue">💰</span><div class="cardText"><div class="label">Today's Sales</div><div class="value" id="totalSales">0 AFN</div></div></div>
-<div class="card glass"><span class="iconBadge green">📈</span><div class="cardText"><div class="label">Today's Profit</div><div class="value" id="totalProfit">0 AFN</div></div></div>
+<div class="card glass"><span class="iconBadge green">📈</span><div class="cardText"><div class="label">Today's Profit</div><div class="value profitVal" id="totalProfit">0 AFN</div></div></div>
 <div class="card glass"><span class="iconBadge purple">🧾</span><div class="cardText"><div class="label">Sales Entries</div><div class="value" id="entryCount">0</div></div></div>
 <div class="card glass"><span class="iconBadge orange">📅</span><div class="cardText"><div class="label">Current Date</div><div class="value" id="dateCard"></div></div></div>
 </div>
@@ -318,7 +326,7 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 <div class="section glass"><h2>🔎 Smart Insights</h2><div id="analyticsInsights"></div></div>
 <div class="section glass"><h2>📊 Analytics</h2><div class="cards" id="analyticsCards"></div></div>
 <div class="section glass"><h2>🥧 Sales Share by Product</h2><div id="salesDonut" class="donutWrap"></div></div>
-<div class="section glass"><h2>🥧 Profit Share by Product</h2><div id="profitDonut" class="donutWrap"></div></div>
+<div class="section glass"><h2>🥧 Profit Share by Product</h2><div id="profitDonut" class="donutWrap profitVal"></div></div>
 <div class="section glass"><h2>📅 Weekday Performance — What To Improve</h2><div id="analyticsWeekday"></div></div>
 <div class="section glass"><h2 id="trendTitle">Sales Trend</h2><div class="chartWrap" id="analyticsTrend"></div></div>
 <div class="section glass"><h2 id="prodTotalsTitle">Per-Product Totals</h2><div id="analyticsProducts"></div><div class="prodBarChart" id="analyticsProductsChart"></div></div>
@@ -331,6 +339,12 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 <div class="section glass"><h2>📂 Import / Export</h2>
 <div style="display:flex;gap:8px;flex-wrap:wrap"><label class="filebtn small"><span class="iconBadge green">📥</span>Import Excel <input id="excel" type="file" accept=".xlsx,.xls,.csv" hidden></label>
 <button type="button" class="filebtn small" onclick="exportBackupExcel()"><span class="iconBadge orange">📤</span>Export Backup</button></div>
+</div>
+<div class="section glass"><h2>🔒 Privacy Lock</h2>
+<p>Set a PIN to lock History and all Profit figures. Once set, you'll need this PIN to open History or view any profit number, on this device.</p>
+<label style="font-size:13px;color:var(--text2);font-weight:600">New PIN (min 4 digits)</label>
+<input id="pinNewInput" type="password" inputmode="numeric" autocomplete="off" class="pinInputField" placeholder="••••">
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button type="button" class="primary small" onclick="savePin()">💾 Save PIN</button><button type="button" class="clearBtn small" onclick="removePinLock()">🗑️ Remove Lock</button></div>
 </div>
 <div class="section glass"><h2>⚙ Product / Price Settings</h2>
 <p>These are defaults for the current day's calculations. Each row stores its own A Price, so changing settings later will not change old days.</p>
@@ -368,6 +382,67 @@ function appConfirm(msg){
     ov.style.display='flex';document.body.classList.add('modalOpen');
     ok.focus();
   });
+}
+function appPrompt(msg,isPin){
+  return new Promise(resolve=>{
+    const ov=document.getElementById('modalOverlay'),btns=document.getElementById('modalBtns');
+    document.getElementById('modalMsg').innerHTML='';
+    const label=document.createElement('div');label.textContent=msg;label.style.marginBottom='10px';
+    const input=document.createElement('input');input.type=isPin?'password':'text';input.inputMode=isPin?'numeric':'text';
+    input.className='pinInputField';input.autocomplete='off';
+    document.getElementById('modalMsg').appendChild(label);document.getElementById('modalMsg').appendChild(input);
+    btns.innerHTML='';
+    const cancel=document.createElement('button');cancel.textContent='Cancel';cancel.className='mbSecondary';
+    const finish=(val)=>{ov.style.display='none';document.body.classList.remove('modalOpen');resolve(val)};
+    cancel.onclick=()=>finish(null);
+    const ok=document.createElement('button');ok.textContent='OK';ok.className='mbPrimary';
+    ok.onclick=()=>finish(input.value);
+    input.onkeydown=(e)=>{if(e.key==='Enter')finish(input.value)};
+    btns.appendChild(cancel);btns.appendChild(ok);
+    ov.style.display='flex';document.body.classList.add('modalOpen');
+    setTimeout(()=>input.focus(),50);
+  });
+}
+const PIN_KEY='starshop_pin_v1';
+let profitUnlocked=false;
+function getPin(){try{return localStorage.getItem(PIN_KEY)||''}catch(e){return ''}}
+function pinIsSet(){return !!getPin()}
+function applyLockUI(){
+  document.body.classList.toggle('profitLocked', pinIsSet()&&!profitUnlocked);
+  const b=document.getElementById('lockBadge');
+  if(b){ b.style.display=pinIsSet()?'inline-flex':'none'; b.textContent=profitUnlocked?'🔓 Unlocked':'🔒 Locked'; }
+}
+async function requirePin(){
+  if(!pinIsSet())return true;
+  if(profitUnlocked)return true;
+  const entered=await appPrompt('Enter PIN to unlock History & Profit',true);
+  if(entered===null)return false;
+  if(entered===getPin()){profitUnlocked=true;applyLockUI();return true}
+  appAlert('Incorrect PIN');return false;
+}
+async function toggleProfitLock(){
+  if(profitUnlocked){profitUnlocked=false;applyLockUI();return}
+  await requirePin();
+}
+async function savePin(){
+  const el=document.getElementById('pinNewInput');
+  const val=(el.value||'').trim();
+  if(val.length<4){appAlert('Use at least 4 digits/characters for the PIN.');return}
+  if(pinIsSet()){
+    const ok=await requirePin();
+    if(!ok)return;
+  }
+  try{localStorage.setItem(PIN_KEY,val)}catch(e){}
+  profitUnlocked=true;applyLockUI();el.value='';
+  appAlert('PIN saved. History & Profit are now locked with this PIN.');
+}
+async function removePinLock(){
+  if(!pinIsSet())return;
+  const ok=await requirePin();
+  if(!ok)return;
+  try{localStorage.removeItem(PIN_KEY)}catch(e){}
+  profitUnlocked=false;applyLockUI();
+  appAlert('PIN removed. History & Profit are no longer locked.');
 }
 const KEY='daily_shop_v3', SET='daily_shop_settings_v3';
 const PRODUCT_KEYS=['soap','wasleen','shampoo10','shampoo6','surf'];
@@ -601,6 +676,7 @@ async function init(){
   }catch(e){}
   ensureRowCounts();
   render();
+  applyLockUI();
   initFirebaseSync();
   const flushNow=()=>{ if(unsaved) manualSave(); };
   window.addEventListener('blur',flushNow);
@@ -644,14 +720,14 @@ function addRowBtnRow(colspan,type,label){
   const disabled=cur<=10?'disabled':'';
   return `<tr class="addRowRow"><td colspan="${colspan}"><div class="rowBtnGroup"><button type="button" class="addRowBtn" onclick="addRows('${type}',10)">+ Add 10${label?' ('+label+')':''}</button><button type="button" class="removeRowBtn" ${disabled} onclick="removeRows('${type}',10)">− Remove 10${label?' ('+label+')':''}</button></div></td></tr>`;
 }
-function buildSoap(){let h='';let n=state.rowCounts.soap;for(let i=0;i<n;i++){let r=state.rows.soap[i]||{};let ap=r.ap??settings.soap;let apDisplay=r.ap??(settings.soap||'');h+=`<tr><td>${i+1}</td><td>${rowInput('soap',i,'ap',apDisplay)}</td><td>${rowInput('soap',i,'sp',r.sp)}</td><td id="soap_profit_${i}">${money((r.sp||0)-(r.ap||ap||0))}</td></tr>`}h+=addRowBtnRow(4,'soap');document.getElementById('soap').innerHTML=h;let c=document.getElementById('soapCount');if(c)c.textContent=n}
-function buildWasleen(){let h='';let n=state.rowCounts.wasleen;for(let i=0;i<n;i++){let r=state.rows.wasleen[i]||{};let kg=r.kg||'',sp=r.sp||'',ap=r.ap??settings.wasleen;let pkg=kg?sp/kg:0,profit=(sp||0)-((kg||0)*(r.ap||ap||0));h+=`<tr><td>${i+1}</td><td>${rowInput('wasleen',i,'kg',kg,'0.01')}</td><td>${rowInput('wasleen',i,'sp',sp)}</td><td id="wasleen_pkg_${i}">${money(pkg)}</td><td id="wasleen_profit_${i}">${money(profit)}</td></tr>`}h+=addRowBtnRow(5,'wasleen');document.getElementById('wasleen').innerHTML=h;let c=document.getElementById('wasleenCount');if(c)c.textContent=n}
+function buildSoap(){let h='';let n=state.rowCounts.soap;for(let i=0;i<n;i++){let r=state.rows.soap[i]||{};let ap=r.ap??settings.soap;let apDisplay=r.ap??(settings.soap||'');h+=`<tr><td>${i+1}</td><td>${rowInput('soap',i,'ap',apDisplay)}</td><td>${rowInput('soap',i,'sp',r.sp)}</td><td class="profitVal" id="soap_profit_${i}">${money((r.sp||0)-(r.ap||ap||0))}</td></tr>`}h+=addRowBtnRow(4,'soap');document.getElementById('soap').innerHTML=h;let c=document.getElementById('soapCount');if(c)c.textContent=n}
+function buildWasleen(){let h='';let n=state.rowCounts.wasleen;for(let i=0;i<n;i++){let r=state.rows.wasleen[i]||{};let kg=r.kg||'',sp=r.sp||'',ap=r.ap??settings.wasleen;let pkg=kg?sp/kg:0,profit=(sp||0)-((kg||0)*(r.ap||ap||0));h+=`<tr><td>${i+1}</td><td>${rowInput('wasleen',i,'kg',kg,'0.01')}</td><td>${rowInput('wasleen',i,'sp',sp)}</td><td id="wasleen_pkg_${i}">${money(pkg)}</td><td class="profitVal" id="wasleen_profit_${i}">${money(profit)}</td></tr>`}h+=addRowBtnRow(5,'wasleen');document.getElementById('wasleen').innerHTML=h;let c=document.getElementById('wasleenCount');if(c)c.textContent=n}
 function buildShampoo(){let hA='',hB='';
 const nA=state.rowCounts.shampooA,nB=state.rowCounts.shampooB,total=nA+nB;
 for(let i=0;i<total;i++){
   let r=state.rows.shampoo[i]||{};let ap=r.ap??(i<nA?settings.sh10:settings.sh6),lit=r.lit||'',sp=r.sp||'',profit=(sp||0)-((lit||0)*(r.ap||ap||0));
   let localNum=i<nA?i+1:(i-nA+1);
-  let row=`<tr><td>${localNum}</td><td>${rowInput('shampoo',i,'lit',lit,'0.01')}</td><td>${rowInput('shampoo',i,'sp',sp)}</td><td id="shampoo_profit_${i}">${money(profit)}</td></tr>`;
+  let row=`<tr><td>${localNum}</td><td>${rowInput('shampoo',i,'lit',lit,'0.01')}</td><td>${rowInput('shampoo',i,'sp',sp)}</td><td class="profitVal" id="shampoo_profit_${i}">${money(profit)}</td></tr>`;
   if(i<nA) hA+=row; else hB+=row;
 }
 hA+=addRowBtnRow(4,'shampooA','1st');hB+=addRowBtnRow(4,'shampooB','2nd');
@@ -660,9 +736,9 @@ document.getElementById('shampooB').innerHTML=hB;
 let cA=document.getElementById('shampooACount');if(cA)cA.textContent=nA;
 let cB=document.getElementById('shampooBCount');if(cB)cB.textContent=nB;
 }
-function buildSurf(){let h='';let n=state.rowCounts.surf;for(let i=0;i<n;i++){let r=state.rows.surf[i]||{};let ap=r.ap??settings.surf;let apDisplay=r.ap??(settings.surf||'');h+=`<tr><td>${i+1}</td><td>${rowInput('surf',i,'ap',apDisplay)}</td><td>${rowInput('surf',i,'sp',r.sp)}</td><td id="surf_profit_${i}">${money((r.sp||0)-(r.ap||ap||0))}</td></tr>`}h+=addRowBtnRow(4,'surf');document.getElementById('surf').innerHTML=h;let c=document.getElementById('surfCount');if(c)c.textContent=n}
-function buildOther(){let h='';let n=state.rowCounts.other;for(let i=0;i<n;i++){let r=state.rows.other[i]||{};h+=`<tr><td>${i+1}</td><td>${rowInput('other',i,'ap',r.ap)}</td><td>${rowInput('other',i,'sp',r.sp)}</td><td id="other_profit_${i}">${money((r.sp||0)-(r.ap||0))}</td></tr>`}h+=addRowBtnRow(4,'other');document.getElementById('other').innerHTML=h;let c=document.getElementById('otherCount');if(c)c.textContent=n}
-function buildFarm(){let h='';let n=state.rowCounts.farm;for(let i=0;i<n;i++){let r=state.rows.farm[i]||{};h+=`<tr><td>${i+1}</td><td>${rowInput('farm',i,'ap',r.ap)}</td><td>${rowInput('farm',i,'sp',r.sp)}</td><td id="farm_profit_${i}">${money((r.sp||0)-(r.ap||0))}</td></tr>`}h+=addRowBtnRow(4,'farm');document.getElementById('farm').innerHTML=h;let c=document.getElementById('farmCount');if(c)c.textContent=n}
+function buildSurf(){let h='';let n=state.rowCounts.surf;for(let i=0;i<n;i++){let r=state.rows.surf[i]||{};let ap=r.ap??settings.surf;let apDisplay=r.ap??(settings.surf||'');h+=`<tr><td>${i+1}</td><td>${rowInput('surf',i,'ap',apDisplay)}</td><td>${rowInput('surf',i,'sp',r.sp)}</td><td class="profitVal" id="surf_profit_${i}">${money((r.sp||0)-(r.ap||ap||0))}</td></tr>`}h+=addRowBtnRow(4,'surf');document.getElementById('surf').innerHTML=h;let c=document.getElementById('surfCount');if(c)c.textContent=n}
+function buildOther(){let h='';let n=state.rowCounts.other;for(let i=0;i<n;i++){let r=state.rows.other[i]||{};h+=`<tr><td>${i+1}</td><td>${rowInput('other',i,'ap',r.ap)}</td><td>${rowInput('other',i,'sp',r.sp)}</td><td class="profitVal" id="other_profit_${i}">${money((r.sp||0)-(r.ap||0))}</td></tr>`}h+=addRowBtnRow(4,'other');document.getElementById('other').innerHTML=h;let c=document.getElementById('otherCount');if(c)c.textContent=n}
+function buildFarm(){let h='';let n=state.rowCounts.farm;for(let i=0;i<n;i++){let r=state.rows.farm[i]||{};h+=`<tr><td>${i+1}</td><td>${rowInput('farm',i,'ap',r.ap)}</td><td>${rowInput('farm',i,'sp',r.sp)}</td><td class="profitVal" id="farm_profit_${i}">${money((r.sp||0)-(r.ap||0))}</td></tr>`}h+=addRowBtnRow(4,'farm');document.getElementById('farm').innerHTML=h;let c=document.getElementById('farmCount');if(c)c.textContent=n}
 function setRow(type,i,field,v){
   if(!state.rows[type][i]) state.rows[type][i]={};
   let val=(v==='' ? null : Number(v));
@@ -781,7 +857,10 @@ show('history');window.scrollTo({top:document.body.scrollHeight,behavior:'smooth
 }
 function saveSettings(){settings={soap:val(document.getElementById('setSoap').value),surf:val(document.getElementById('setSurf').value),wasleen:val(document.getElementById('setWasleen').value),sh10:val(document.getElementById('setSh10').value)||5,sh6:val(document.getElementById('setSh6').value)||8,rent:Number(settings.rent||0)};storageSet(SET,JSON.stringify(settings));appAlert('Settings saved. Existing entered rows keep their own A Price.');render()}
 function loadSettings(){document.getElementById('setSoap').value=settings.soap??'';document.getElementById('setSurf').value=settings.surf??'';document.getElementById('setWasleen').value=settings.wasleen??57;document.getElementById('setSh10').value=settings.sh10??5;document.getElementById('setSh6').value=settings.sh6??8}
-function show(id){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('navActive',b.dataset.view===id));if(id==='history')renderHistory();if(id==='analytics')renderAnalytics()}
+async function show(id){
+  if(id==='history'){ if(!(await requirePin())) return; }
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('navActive',b.dataset.view===id));if(id==='history')renderHistory();if(id==='analytics')renderAnalytics()
+}
 function showProd(tab){
   document.querySelectorAll('.prodSection').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));
   document.querySelectorAll('.prodTabBtn').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));
@@ -805,7 +884,7 @@ function renderAnalytics(){
   document.getElementById('analyticsCards').innerHTML=`
   <div class="card glass"><span class="iconBadge gray">📅</span><div class="cardText"><div class="label">Days Recorded</div><div class="value">${h.length}</div></div></div>
   <div class="card glass"><span class="iconBadge blue">💰</span><div class="cardText"><div class="label">Sales</div><div class="value">${money(totalSales)}</div></div></div>
-  <div class="card glass"><span class="iconBadge green">📈</span><div class="cardText"><div class="label">Profit</div><div class="value">${money(totalProfit)}</div></div></div>
+  <div class="card glass"><span class="iconBadge green">📈</span><div class="cardText"><div class="label">Profit</div><div class="value profitVal">${money(totalProfit)}</div></div></div>
   <div class="card glass"><span class="iconBadge orange">📊</span><div class="cardText"><div class="label">Avg Daily Sales</div><div class="value">${money(totalSales/h.length)}</div></div></div>
   <div class="card glass"><span class="iconBadge blue">⚖️</span><div class="cardText"><div class="label">Total KG (Wasleen)</div><div class="value">${money(totalKg)} kg</div></div></div>
   <div class="card glass"><span class="iconBadge green">🧴</span><div class="cardText"><div class="label">Total Litres (Shampoo)</div><div class="value">${money(totalLtr)} L</div></div></div>`;
@@ -815,7 +894,7 @@ function renderAnalytics(){
   let labels={soap:'Soap',wasleen:'Wasleen',shampoo:'Shampoo',surf:'Surf',other:'Others',farm:'Farm'};
   let units={soap:'pcs',wasleen:'kg',shampoo:'L',surf:'pcs',other:'pcs',farm:'pcs'};
   let activeKeys=Object.keys(displayTotals).filter(k=>displayTotals[k][1]||displayTotals[k][2]);
-  let rows=activeKeys.map(k=>`<tr><td>${labels[k]}</td><td>${money(displayTotals[k][0])} ${units[k]}</td><td>${money(displayTotals[k][1])}</td><td>${money(displayTotals[k][2])}</td></tr>`).join('');
+  let rows=activeKeys.map(k=>`<tr><td>${labels[k]}</td><td>${money(displayTotals[k][0])} ${units[k]}</td><td>${money(displayTotals[k][1])}</td><td class="profitVal">${money(displayTotals[k][2])}</td></tr>`).join('');
   document.getElementById('analyticsProducts').innerHTML=`<table><tr><th>Product</th><th>Quantity</th><th>Sales</th><th>Profit</th></tr>${rows}</table>`;
   let maxProd=Math.max(...activeKeys.map(k=>displayTotals[k][1]),1);
   document.getElementById('analyticsProductsChart').innerHTML=activeKeys.map(k=>`

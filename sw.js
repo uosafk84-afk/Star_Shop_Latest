@@ -1,6 +1,6 @@
-const CACHE = 'star-shop-v28';
+const CACHE = 'star-shop-v29';
 const ASSETS = [
-  './', './index.html', './manifest.json', './icon-192.png', './icon-512.png',
+  './', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './logo-badge.png',
   'https://cdnjs.cloudflare.com/ajax/libs/firebase/12.16.0/firebase-app-compat.js',
   'https://cdnjs.cloudflare.com/ajax/libs/firebase/12.16.0/firebase-firestore-compat.js',
   'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
