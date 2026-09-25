@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>STAR SHOP</title>
+<script>(function(){try{var p=localStorage.getItem('starshop_theme_v1')||'auto';var d=p==='dark'||(p==='auto'&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.setAttribute('data-theme',d?'dark':'light')}catch(e){}})();</script>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#F2F2F7">
 <link rel="icon" href="icon-192.png">
@@ -23,7 +24,37 @@
   --sep:rgba(60,60,67,.13); --fill:rgba(120,120,128,.12);
   --shadow:0 14px 34px rgba(31,38,60,.16),0 2px 8px rgba(31,38,60,.08);
   --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.2,.8,.2,1);
+  --tableHeadBg:rgba(255,255,255,.14); --tableRowBg:rgba(255,255,255,.09); --tableRowAlt:rgba(255,255,255,.16);
+  --modalBg:rgba(255,255,255,.88); --dockBg:rgba(255,255,255,.08); --dockBorder:rgba(255,255,255,.5);
+  --chipBg:rgba(255,255,255,.5); --insightBg:rgba(255,255,255,.12);
+  --inputBg:rgba(255,255,255,.16); --inputBorder:rgba(255,255,255,.55);
+  --glow:rgba(30,150,255,.55); --glossHi:rgba(255,255,255,.55);
 }
+:root[data-theme="dark"]{
+  --bg:#0a0f1c; --surface:#141b2b;
+  --glass:rgba(255,255,255,.045); --glassBorder:rgba(255,255,255,.10);
+  --text:#f0f2f8; --text2:#a6afc2;
+  --blue:#3aa0ff; --blueDark:#0a84ff; --green:#34D970; --red:#ff5b50; --orange:#ffa927;
+  --sep:rgba(255,255,255,.12); --fill:rgba(255,255,255,.09);
+  --shadow:0 14px 34px rgba(0,0,0,.55),0 2px 10px rgba(0,0,0,.4);
+  --tableHeadBg:rgba(255,255,255,.07); --tableRowBg:rgba(255,255,255,.035); --tableRowAlt:rgba(255,255,255,.065);
+  --modalBg:rgba(22,26,38,.92); --dockBg:rgba(18,22,34,.62); --dockBorder:rgba(255,255,255,.14);
+  --chipBg:rgba(255,255,255,.08); --insightBg:rgba(255,255,255,.05);
+  --inputBg:rgba(255,255,255,.07); --inputBorder:rgba(255,255,255,.18);
+  --glow:rgba(80,180,255,.75); --glossHi:rgba(255,255,255,.18);
+}
+:root[data-theme="dark"] body::before{opacity:.85;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255,170,90,.22), transparent 32%),
+    radial-gradient(circle at 82% 4%, rgba(255,200,120,.18), transparent 30%),
+    radial-gradient(circle at 90% 55%, rgba(60,140,255,.38), transparent 34%),
+    radial-gradient(circle at 8% 70%, rgba(255,90,150,.2), transparent 32%),
+    radial-gradient(circle at 60% 90%, rgba(120,90,255,.32), transparent 34%),
+    radial-gradient(circle at 50% 45%, rgba(20,70,190,.4), transparent 45%),
+    linear-gradient(180deg,#0a0f1c,#0c1526 40%,#111a2e);
+}
+:root[data-theme="dark"] body::after{opacity:.12}
+:root[data-theme="dark"] .glass::before{opacity:.18}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",Inter,system-ui,sans-serif;
@@ -54,10 +85,13 @@ body.modalOpen .app{transform:scale(1.045)}
 .glass>*{position:relative;z-index:1}
 header{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:8px;z-index:20;margin-bottom:14px}
 .title{font-size:18px;font-weight:700;letter-spacing:-.2px;display:flex;align-items:center;gap:7px}
-.title img{width:26px;height:26px;border-radius:8px;display:block;box-shadow:0 3px 8px rgba(0,0,0,.2)}
+.title img{width:30px;height:30px;border-radius:9px;display:block;box-shadow:0 3px 8px rgba(0,0,0,.2);animation:iconGlow 3s ease-in-out infinite}
 .date{font-size:13px;color:var(--text2);margin-top:2px;font-weight:500}
-.headerBadge{width:48px;height:48px;border-radius:50%;object-fit:cover;box-shadow:0 3px 10px rgba(10,50,120,.25);flex-shrink:0}
+.headerBadge{width:60px;height:60px;border-radius:50%;object-fit:cover;flex-shrink:0;animation:iconGlow 3s ease-in-out infinite}
+@keyframes iconGlow{0%,100%{box-shadow:0 0 8px 1px var(--glow),0 3px 10px rgba(10,50,120,.3)}50%{box-shadow:0 0 18px 6px var(--glow),0 3px 10px rgba(10,50,120,.3)}}
 .lockBadge{cursor:pointer}
+.themeBadge{cursor:pointer;background:rgba(120,140,255,.14);color:#3f4fb0;border:1px solid rgba(120,140,255,.3)}
+:root[data-theme="dark"] .themeBadge{background:rgba(120,160,255,.16);color:#bcd0ff;border:1px solid rgba(120,160,255,.35)}
 body.profitLocked .profitVal{filter:blur(5px);user-select:none;transition:filter .2s}
 .pinInputField{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--sep);font-size:16px;margin-top:2px;box-sizing:border-box;letter-spacing:2px}
 input.date{border:none;background:transparent;color:var(--text2);font:inherit;padding:0;margin:0;width:auto;max-width:none;display:inline-block;-webkit-appearance:none;cursor:pointer}
@@ -124,7 +158,7 @@ table{border-collapse:collapse;border-spacing:0;width:auto}
   justify-content:center;padding:16px;backdrop-filter:saturate(140%);animation:fadeIn .2s var(--ease)}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .modalBox{max-width:290px;width:100%;padding:0;border-radius:20px;overflow:hidden;text-align:center;
-  animation:modalIn .28s var(--ease);background:rgba(255,255,255,.88);backdrop-filter:saturate(160%)}
+  animation:modalIn .28s var(--ease);background:var(--modalBg);backdrop-filter:saturate(160%)}
 @keyframes modalIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
 .modalMsg{white-space:pre-wrap;font-size:16.5px;line-height:1.5;padding:22px 18px 16px;font-weight:500}
 .modalBtns{display:flex;border-top:1px solid var(--sep)}
@@ -153,9 +187,9 @@ table{border-collapse:collapse;border-spacing:0;width:auto}
   box-shadow:0 8px 20px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
 .saveToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 th,td{padding:2px 1px;text-align:center;border:1px solid rgba(110,118,140,.28)}
-th{font-size:13px;color:var(--text2);font-weight:600;background:rgba(255,255,255,.14);letter-spacing:.1px}
-td{background:rgba(255,255,255,.09);font-size:14px}
-tbody tr:nth-child(even) td{background:rgba(255,255,255,.16)}
+th{font-size:13px;color:var(--text2);font-weight:600;background:var(--tableHeadBg);letter-spacing:.1px}
+td{background:var(--tableRowBg);font-size:14px}
+tbody tr:nth-child(even) td{background:var(--tableRowAlt)}
 tbody tr:last-child td{border-bottom:1px solid rgba(110,118,140,.28)}
 .prodTable{border-radius:12px;overflow:hidden}
 .shampooGrid{display:grid;grid-template-columns:1fr auto 1fr;gap:6px}
@@ -172,7 +206,7 @@ tbody tr:last-child td{border-bottom:1px solid rgba(110,118,140,.28)}
   padding:6px 8px;border-radius:9px;font-weight:600;font-size:14.5px;cursor:pointer;transition:transform .12s var(--spring),background-color .15s}
 .removeRowBtn:active{transform:scale(.96);background:rgba(255,59,48,.18)}
 .removeRowBtn:disabled{opacity:.4;cursor:not-allowed}
-input,select{width:100%;max-width:54px;border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.16);border-radius:6px;padding:3px 2px;
+input,select{width:100%;max-width:54px;border:1px solid var(--inputBorder);background:var(--inputBg);border-radius:6px;padding:3px 2px;
   color:var(--text);outline:none;font-size:15.5px;margin:0 auto;display:block;transition:box-shadow .15s}
 input:focus,select:focus{box-shadow:0 0 0 2px var(--blue);background:rgba(255,255,255,.30)}
 td input,td select{max-width:100%;border:none;border-radius:0;background:transparent;padding:1px 0;font-size:14px;margin:0}
@@ -188,7 +222,7 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 .barRow{display:grid;grid-template-columns:90px 1fr 70px;gap:8px;align-items:center;margin:6px 0;font-size:15px}
 @media(max-width:900px){.cards,.totals{grid-template-columns:repeat(2,1fr)}.grid2,.mapgrid{grid-template-columns:1fr}header{position:relative}.app{padding:10px 10px 96px}.section{padding:14px}}
 .insightCard{border-radius:16px;padding:13px 15px;margin-bottom:8px;font-size:15.5px;line-height:1.45;
-  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.5);animation:cardIn .4s var(--ease) backwards}
+  background:var(--insightBg);border:1px solid var(--glassBorder);animation:cardIn .4s var(--ease) backwards}
 .insightCard:nth-child(1){animation-delay:.02s}
 .insightCard:nth-child(2){animation-delay:.07s}
 .insightCard:nth-child(3){animation-delay:.12s}
@@ -208,7 +242,7 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 .prodBarChart{display:flex;flex-direction:column;gap:10px;margin-top:10px}
 .prodBarRow{display:grid;grid-template-columns:86px 1fr 68px;gap:10px;align-items:center;font-size:15.5px}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{border:1px solid rgba(60,60,67,.2);background:rgba(255,255,255,.5);color:var(--text2);padding:8px 14px;
+.chip{border:1px solid var(--sep);background:var(--chipBg);color:var(--text2);padding:8px 14px;
   border-radius:999px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s}
 .chip.chipActive{background:var(--blue,#007AFF);color:#fff;border-color:transparent}
 .donutWrap{display:flex;flex-wrap:wrap;align-items:center;gap:20px;justify-content:center}
@@ -226,8 +260,8 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 .wdBar{height:100%;border-radius:5px;transition:width .6s var(--ease)}
 .wdNote{font-size:15px;color:var(--text2);line-height:1.4}
 .dock{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:4px;
-  padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.08);backdrop-filter:saturate(160%);
-  -webkit-backdrop-filter:saturate(160%);border:1px solid rgba(255,255,255,.5);
+  padding:8px 10px;border-radius:999px;background:var(--dockBg);backdrop-filter:saturate(160%);
+  -webkit-backdrop-filter:saturate(160%);border:1px solid var(--dockBorder);
   box-shadow:0 14px 34px rgba(31,38,60,.22),inset 0 1px 0 rgba(255,255,255,.75);max-width:96vw;
   transition:transform .32s var(--ease),opacity .32s var(--ease)}
 .dock.dockHidden{transform:translateX(-50%) translateY(140%);opacity:0;pointer-events:none}
@@ -236,11 +270,17 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 .dock button:active{transform:scale(.9)}
 .dock button.navActive{color:var(--blue)}
 .dock button .dockIcon{font-size:20px}
-.dock .dockHome{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.6);
+.dock .dockHome{width:46px;height:46px;border-radius:50%;background:var(--chipBg);border:1px solid var(--dockBorder);
   display:flex;align-items:center;justify-content:center;margin:0 2px;transform:translateY(-10px);
-  box-shadow:0 8px 18px rgba(31,38,60,.22),inset 0 1px 0 rgba(255,255,255,.6);flex-shrink:0}
+  box-shadow:0 8px 18px rgba(31,38,60,.22),inset 0 1px 0 var(--glossHi);flex-shrink:0;animation:iconGlow 3s ease-in-out infinite}
 .dock .dockHome img{width:26px;height:26px;border-radius:7px;display:block}
 .dock .dockHome:active{transform:translateY(-10px) scale(.9)}
+.themeOptBtn{border:1px solid var(--glassBorder);background:var(--glass);backdrop-filter:saturate(160%);
+  color:var(--text2);padding:9px 14px;border-radius:999px;font-weight:600;font-size:14.5px;cursor:pointer;flex:1 1 auto;
+  text-align:center;white-space:nowrap;transition:transform .12s var(--spring),background-color .15s,color .15s;
+  box-shadow:0 4px 12px rgba(31,38,60,.08),inset 0 1px 0 var(--glossHi)}
+.themeOptBtn:active{transform:scale(.95)}
+.themeOptBtn.active{background:var(--blue);color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(0,122,255,.4),inset 0 1px 0 rgba(255,255,255,.4)}
 </style>
 </head>
 <body>
@@ -252,7 +292,7 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 </div>
 <div id="saveToast" class="saveToast">✓ Saved</div>
 <div class="app">
-<header class="glass"><div><div class="title"><img src="icon-192.png" alt=""> STAR SHOP</div><div class="date">Working day: <input type="date" class="date" id="workDateInput" onchange="changeWorkDate(this.value)"></div><div id="syncBadge" class="syncBadge offline">📴 Local only</div> <span id="unsavedBadge" class="syncBadge unsaved" style="display:none">● Saving…</span> <span id="lockBadge" class="syncBadge lockBadge" style="display:none" onclick="toggleProfitLock()">🔒 Locked</span></div><img class="headerBadge" src="logo-badge.png" alt="Star Shampoo and Wasleen Factory"></header>
+<header class="glass"><div><div class="title"><img src="icon-192.png" alt=""> STAR SHOP</div><div class="date">Working day: <input type="date" class="date" id="workDateInput" onchange="changeWorkDate(this.value)"></div><div id="syncBadge" class="syncBadge offline">📴 Local only</div> <span id="unsavedBadge" class="syncBadge unsaved" style="display:none">● Saving…</span> <span id="themeBadge" class="syncBadge themeBadge" onclick="cycleTheme()">☀️ Day</span> <span id="lockBadge" class="syncBadge lockBadge" style="display:none" onclick="toggleProfitLock()">🔒 Locked</span></div><img class="headerBadge" src="logo-badge.png" alt="Star Shampoo and Wasleen Factory"></header>
 <div class="dock">
 <button type="button" data-view="daily" onclick="show('daily')"><span class="dockIcon">🏠</span>Home</button>
 <button type="button" data-view="history" onclick="show('history')"><span class="dockIcon">🕘</span>History</button>
@@ -340,6 +380,14 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 <div style="display:flex;gap:8px;flex-wrap:wrap"><label class="filebtn small"><span class="iconBadge green">📥</span>Import Excel <input id="excel" type="file" accept=".xlsx,.xls,.csv" hidden></label>
 <button type="button" class="filebtn small" onclick="exportBackupExcel()"><span class="iconBadge orange">📤</span>Export Backup</button></div>
 </div>
+<div class="section glass"><h2>🌗 Appearance</h2>
+<p>Choose how STAR SHOP looks. Automatic follows your phone's system setting.</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button type="button" class="themeOptBtn" data-theme="light" onclick="setTheme('light')">☀️ Day</button>
+<button type="button" class="themeOptBtn" data-theme="dark" onclick="setTheme('dark')">🌙 Night</button>
+<button type="button" class="themeOptBtn" data-theme="auto" onclick="setTheme('auto')">🌗 Automatic</button>
+</div>
+</div>
 <div class="section glass"><h2>🔒 Privacy Lock</h2>
 <p>Set a PIN to lock History and all Profit figures. Once set, you'll need this PIN to open History or view any profit number, on this device.</p>
 <label style="font-size:13px;color:var(--text2);font-weight:600">New PIN (min 4 digits)</label>
@@ -403,6 +451,25 @@ function appPrompt(msg,isPin){
     setTimeout(()=>input.focus(),50);
   });
 }
+const THEME_KEY='starshop_theme_v1';
+function getThemePref(){try{return localStorage.getItem(THEME_KEY)||'auto'}catch(e){return 'auto'}}
+function resolveTheme(pref){ if(pref==='auto') return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'; return pref; }
+function applyTheme(){
+  const pref=getThemePref(), resolved=resolveTheme(pref);
+  document.documentElement.setAttribute('data-theme',resolved);
+  const meta=document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute('content', resolved==='dark' ? '#0a0f1c' : '#F2F2F7');
+  const b=document.getElementById('themeBadge');
+  if(b){
+    const icon = pref==='auto' ? '🌗' : (pref==='dark'?'🌙':'☀️');
+    const label = pref==='auto' ? 'Auto' : (pref==='dark'?'Night':'Day');
+    b.textContent = icon+' '+label;
+  }
+  document.querySelectorAll('.themeOptBtn').forEach(x=>x.classList.toggle('active', x.dataset.theme===pref));
+}
+function setTheme(pref){ try{localStorage.setItem(THEME_KEY,pref)}catch(e){} applyTheme(); }
+function cycleTheme(){ const order=['light','dark','auto']; const cur=getThemePref(); setTheme(order[(order.indexOf(cur)+1)%order.length]); }
+if(window.matchMedia){ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ()=>{ if(getThemePref()==='auto') applyTheme(); }); }
 const PIN_KEY='starshop_pin_v1';
 let profitUnlocked=false;
 function getPin(){try{return localStorage.getItem(PIN_KEY)||''}catch(e){return ''}}
@@ -433,8 +500,8 @@ async function savePin(){
     if(!ok)return;
   }
   try{localStorage.setItem(PIN_KEY,val)}catch(e){}
-  profitUnlocked=true;applyLockUI();el.value='';
-  appAlert('PIN saved. History & Profit are now locked with this PIN.');
+  profitUnlocked=false;applyLockUI();el.value='';
+  appAlert('PIN saved. History & Profit are now locked — tap the 🔒 badge and enter your PIN to view them.');
 }
 async function removePinLock(){
   if(!pinIsSet())return;
@@ -677,6 +744,7 @@ async function init(){
   ensureRowCounts();
   render();
   applyLockUI();
+  applyTheme();
   initFirebaseSync();
   const flushNow=()=>{ if(unsaved) manualSave(); };
   window.addEventListener('blur',flushNow);
