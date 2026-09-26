@@ -745,6 +745,7 @@ async function init(){
   render();
   applyLockUI();
   applyTheme();
+  armBackGuard();
   initFirebaseSync();
   const flushNow=()=>{ if(unsaved) manualSave(); };
   window.addEventListener('blur',flushNow);
@@ -925,9 +926,36 @@ show('history');window.scrollTo({top:document.body.scrollHeight,behavior:'smooth
 }
 function saveSettings(){settings={soap:val(document.getElementById('setSoap').value),surf:val(document.getElementById('setSurf').value),wasleen:val(document.getElementById('setWasleen').value),sh10:val(document.getElementById('setSh10').value)||5,sh6:val(document.getElementById('setSh6').value)||8,rent:Number(settings.rent||0)};storageSet(SET,JSON.stringify(settings));appAlert('Settings saved. Existing entered rows keep their own A Price.');render()}
 function loadSettings(){document.getElementById('setSoap').value=settings.soap??'';document.getElementById('setSurf').value=settings.surf??'';document.getElementById('setWasleen').value=settings.wasleen??57;document.getElementById('setSh10').value=settings.sh10??5;document.getElementById('setSh6').value=settings.sh6??8}
+function currentViewId(){ const el=document.querySelector('.view.active'); return el?el.id:'daily'; }
+async function renderView(id,fromPop){
+  if(id==='history'){
+    const ok=await requirePin();
+    if(!ok){ if(fromPop) history.forward(); return false; }
+  }
+  const target=document.getElementById(id); if(!target) return false;
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  target.classList.add('active');
+  document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('navActive',b.dataset.view===id));
+  if(id==='history')renderHistory();
+  if(id==='analytics')renderAnalytics();
+  return true;
+}
 async function show(id){
-  if(id==='history'){ if(!(await requirePin())) return; }
-  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('navActive',b.dataset.view===id));if(id==='history')renderHistory();if(id==='analytics')renderAnalytics()
+  if(id===currentViewId())return;
+  const ok=await renderView(id);
+  if(ok) history.pushState({appView:id},'','#'+id);
+}
+let appExiting=false;
+function armBackGuard(){
+  history.pushState({appView:currentViewId()},'','#'+currentViewId());
+  window.addEventListener('popstate', async (e)=>{
+    if(appExiting)return;
+    const st=e.state;
+    if(st && st.appView){ await renderView(st.appView, true); return; }
+    history.pushState({appView:currentViewId()},'','#'+currentViewId());
+    const ok=await appConfirm('Exit STAR SHOP?');
+    if(ok){ appExiting=true; history.back(); history.back(); }
+  });
 }
 function showProd(tab){
   document.querySelectorAll('.prodSection').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));
