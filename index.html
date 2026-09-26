@@ -315,9 +315,9 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 <div class="section glass prodSection" data-tab="wasleen"><h2>🫧 Wasleen — <span id="wasleenCount">40</span> sales</h2><table class="prodTable"><colgroup><col style="width:10%"><col style="width:20%"><col style="width:22%"><col style="width:22%"><col style="width:26%"></colgroup><thead><tr><th>#</th><th>KG</th><th>S Price</th><th>Price / KG</th><th>Profit</th></tr></thead><tbody id="wasleen"></tbody></table></div>
 <div class="section glass prodSection" data-tab="shampoo"><h2>🧴 Shampoo — <span id="shampooACount">20</span> + <span id="shampooBCount">20</span> sales</h2>
 <div class="shampooGrid">
-<div><div class="shampooColLabel">First 20</div><table class="prodTable"><colgroup><col style="width:16%"><col style="width:28%"><col style="width:28%"><col style="width:28%"></colgroup><thead><tr><th>#</th><th>Litre</th><th>Price</th><th>Profit</th></tr></thead><tbody id="shampooA"></tbody></table></div>
+<div><div class="shampooColLabel">First 20</div><button type="button" class="primary small" style="width:100%;margin-bottom:6px" onclick="quickAddShampooA()">⚡ Add 10L (60)</button><table class="prodTable"><colgroup><col style="width:16%"><col style="width:28%"><col style="width:28%"><col style="width:28%"></colgroup><thead><tr><th>#</th><th>Litre</th><th>Price</th><th>Profit</th></tr></thead><tbody id="shampooA"></tbody></table></div>
 <div class="shampooDivider"></div>
-<div><div class="shampooColLabel">Second 20</div><table class="prodTable"><colgroup><col style="width:16%"><col style="width:28%"><col style="width:28%"><col style="width:28%"></colgroup><thead><tr><th>#</th><th>Litre</th><th>Price</th><th>Profit</th></tr></thead><tbody id="shampooB"></tbody></table></div>
+<div><div class="shampooColLabel">Second 20</div><button type="button" class="primary small" style="width:100%;margin-bottom:6px" onclick="quickAddShampooB()">⚡ Add 10L (100)</button><table class="prodTable"><colgroup><col style="width:16%"><col style="width:28%"><col style="width:28%"><col style="width:28%"></colgroup><thead><tr><th>#</th><th>Litre</th><th>Price</th><th>Profit</th></tr></thead><tbody id="shampooB"></tbody></table></div>
 </div>
 </div>
 <div class="section glass prodSection" data-tab="surf"><h2>🧽 Surf — <span id="surfCount">40</span> sales</h2><table class="prodTable"><colgroup><col style="width:12%"><col style="width:29%"><col style="width:29%"><col style="width:30%"></colgroup><thead><tr><th>#</th><th>A Price</th><th>S Price</th><th>Profit</th></tr></thead><tbody id="surf"></tbody></table></div>
@@ -728,13 +728,15 @@ async function manualSave(){
   flashSaved();
 }
 let saveToastTimer=null;
-function flashSaved(){
+function flashToast(msg){
   const el=document.getElementById('saveToast');
   if(!el)return;
+  el.textContent=msg;
   el.classList.add('show');
   clearTimeout(saveToastTimer);
   saveToastTimer=setTimeout(()=>el.classList.remove('show'),1100);
 }
+function flashSaved(){ flashToast('✓ Saved'); }
 async function init(){
   try{
     const [sRaw,stRaw]=await Promise.all([storageGet(SET),storageGet(KEY)]);
@@ -791,6 +793,36 @@ function addRowBtnRow(colspan,type,label){
 }
 function buildSoap(){let h='';let n=state.rowCounts.soap;for(let i=0;i<n;i++){let r=state.rows.soap[i]||{};let ap=r.ap??settings.soap;let apDisplay=r.ap??(settings.soap||'');h+=`<tr><td>${i+1}</td><td>${rowInput('soap',i,'ap',apDisplay)}</td><td>${rowInput('soap',i,'sp',r.sp)}</td><td class="profitVal" id="soap_profit_${i}">${money((r.sp||0)-(r.ap||ap||0))}</td></tr>`}h+=addRowBtnRow(4,'soap');document.getElementById('soap').innerHTML=h;let c=document.getElementById('soapCount');if(c)c.textContent=n}
 function buildWasleen(){let h='';let n=state.rowCounts.wasleen;for(let i=0;i<n;i++){let r=state.rows.wasleen[i]||{};let kg=r.kg||'',sp=r.sp||'',ap=r.ap??settings.wasleen;let pkg=kg?sp/kg:0,profit=(sp||0)-((kg||0)*(r.ap||ap||0));h+=`<tr><td>${i+1}</td><td>${rowInput('wasleen',i,'kg',kg,'0.01')}</td><td>${rowInput('wasleen',i,'sp',sp)}</td><td id="wasleen_pkg_${i}">${money(pkg)}</td><td class="profitVal" id="wasleen_profit_${i}">${money(profit)}</td></tr>`}h+=addRowBtnRow(5,'wasleen');document.getElementById('wasleen').innerHTML=h;let c=document.getElementById('wasleenCount');if(c)c.textContent=n}
+function shampooNextEmpty(startIncl,endExcl){
+  for(let i=startIncl;i<endExcl;i++){
+    const r=state.rows.shampoo[i];
+    if(!r || (r.sp==null && r.lit==null)) return i;
+  }
+  return -1;
+}
+function quickAddShampooA(){
+  ensureRowCounts();
+  let iA=shampooNextEmpty(0,state.rowCounts.shampooA);
+  if(iA===-1){ addRows('shampooA',10); iA=state.rowCounts.shampooA-10; }
+  if(!state.rows.shampoo[iA]) state.rows.shampoo[iA]={};
+  state.rows.shampoo[iA].lit=10; state.rows.shampoo[iA].sp=60;
+  if(!state.rows.shampoo[iA]._id) state.rows.shampoo[iA]._id=newRowId();
+  markDirty();
+  render();
+  flashToast('⚡ Added 10L to First 20');
+}
+function quickAddShampooB(){
+  ensureRowCounts();
+  let nA=state.rowCounts.shampooA, total=nA+state.rowCounts.shampooB;
+  let iB=shampooNextEmpty(nA,total);
+  if(iB===-1){ addRows('shampooB',10); total=state.rowCounts.shampooA+state.rowCounts.shampooB; iB=total-10; }
+  if(!state.rows.shampoo[iB]) state.rows.shampoo[iB]={};
+  state.rows.shampoo[iB].lit=10; state.rows.shampoo[iB].sp=100;
+  if(!state.rows.shampoo[iB]._id) state.rows.shampoo[iB]._id=newRowId();
+  markDirty();
+  render();
+  flashToast('⚡ Added 10L to Second 20');
+}
 function buildShampoo(){let hA='',hB='';
 const nA=state.rowCounts.shampooA,nB=state.rowCounts.shampooB,total=nA+nB;
 for(let i=0;i<total;i++){
