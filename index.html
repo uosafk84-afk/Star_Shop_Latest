@@ -189,6 +189,7 @@ table{border-collapse:collapse;border-spacing:0;width:auto}
 th,td{padding:2px 1px;text-align:center;border:1px solid rgba(110,118,140,.28)}
 th{font-size:13px;color:var(--text2);font-weight:600;background:var(--tableHeadBg);letter-spacing:.1px}
 td{background:var(--tableRowBg);font-size:14px}
+.subtotalRow td{background:var(--tableHeadBg);font-weight:700;border-top:2px solid var(--sep)}
 tbody tr:nth-child(even) td{background:var(--tableRowAlt)}
 tbody tr:last-child td{border-bottom:1px solid rgba(110,118,140,.28)}
 .prodTable{border-radius:12px;overflow:hidden}
@@ -947,12 +948,16 @@ async function deleteHistoryDay(idx){
 function detail(i){let d=state.history[i],s=d.summary.products||{};
 let sh10=s.shampoo10||[0,0,0],sh6=s.shampoo6||[0,0,0];
 let shampooCombined=(sh10[0]||sh6[0]||sh10[1]||sh6[1]||sh10[2]||sh6[2])?[sh10[0]+sh6[0],sh10[1]+sh6[1],sh10[2]+sh6[2]]:null;
+let surf=s.surf||[0,0,0], other=s.other||[0,0,0], farm=s.farm||[0,0,0];
+let sofTotal=(surf[0]||other[0]||farm[0]||surf[1]||other[1]||farm[1]||surf[2]||other[2]||farm[2])?[surf[0]+other[0]+farm[0],surf[1]+other[1]+farm[1],surf[2]+other[2]+farm[2]]:null;
 let rows=[
   ['Soap',s.soap],['Wasleen',s.wasleen],['Shampoo',shampooCombined],['Surf',s.surf],['Others',s.other],['Farm',s.farm]
 ].filter(([_,v])=>v);
 let body=rows.map(([label,v])=>`<tr><td>${label}</td><td>${money(v[0])}</td><td>${money(v[1])}</td><td>${money(v[2])}</td></tr>`).join('');
+let sofRow=sofTotal?`<tr class="subtotalRow"><td>Surf + Others + Farm (Total)</td><td>${money(sofTotal[0])}</td><td>${money(sofTotal[1])}</td><td>${money(sofTotal[2])}</td></tr>`:'';
 document.getElementById('detail').innerHTML=`<div class="section glass"><h2>${d.date} — Combined Daily Record</h2><table><tr><th>Product</th><th>Quantity</th><th>Total Sales</th><th>Total Profit</th></tr>
 ${body}
+${sofRow}
 <tr><th>Daily Total</th><th></th><th>${money(d.summary.totalSales)}</th><th>${money(d.summary.netProfit)}</th></tr></table><p>Rent: ${money(d.rent??d.summary.rent??0)} AFN &nbsp; Expenses: ${money(d.expenses)} AFN</p></div>`;
 show('history');window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
