@@ -94,6 +94,7 @@ header{padding:10px 14px;display:flex;justify-content:space-between;align-items:
 :root[data-theme="dark"] .themeBadge{background:rgba(120,160,255,.16);color:#bcd0ff;border:1px solid rgba(120,160,255,.35)}
 body.profitLocked .profitVal{filter:blur(5px);user-select:none;transition:filter .2s}
 .pinInputField{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--sep);font-size:16px;margin-top:2px;box-sizing:border-box;letter-spacing:2px}
+.forgotPinLink{margin-top:10px;font-size:13.5px;color:var(--blue);font-weight:600;cursor:pointer;text-decoration:underline}
 input.date{border:none;background:transparent;color:var(--text2);font:inherit;padding:0;margin:0;width:auto;max-width:none;display:inline-block;-webkit-appearance:none;cursor:pointer}
 input.date:focus{outline:1px solid var(--blue);border-radius:4px}
 nav{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
@@ -440,9 +441,22 @@ function appPrompt(msg,isPin){
     const input=document.createElement('input');input.type=isPin?'password':'text';input.inputMode=isPin?'numeric':'text';
     input.className='pinInputField';input.autocomplete='off';
     document.getElementById('modalMsg').appendChild(label);document.getElementById('modalMsg').appendChild(input);
+    const finish=(val)=>{ov.style.display='none';document.body.classList.remove('modalOpen');resolve(val)};
+    if(isPin){
+      const forgot=document.createElement('div');forgot.textContent='Forgot PIN?';forgot.className='forgotPinLink';
+      forgot.onclick=async()=>{
+        const sure=await appConfirm('Remove the PIN lock? Your sales data is never affected by this — only the PIN itself is cleared. You can set a new PIN anytime in More → Privacy Lock.');
+        if(sure){
+          try{localStorage.removeItem(PIN_KEY)}catch(e){}
+          profitUnlocked=false;applyLockUI();
+          finish(null);
+          await appAlert('PIN removed. History & Profit are unlocked now — tap again to continue.');
+        }
+      };
+      document.getElementById('modalMsg').appendChild(forgot);
+    }
     btns.innerHTML='';
     const cancel=document.createElement('button');cancel.textContent='Cancel';cancel.className='mbSecondary';
-    const finish=(val)=>{ov.style.display='none';document.body.classList.remove('modalOpen');resolve(val)};
     cancel.onclick=()=>finish(null);
     const ok=document.createElement('button');ok.textContent='OK';ok.className='mbPrimary';
     ok.onclick=()=>finish(input.value);
