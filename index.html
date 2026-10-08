@@ -3,7 +3,15 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>STAR SHOP</title>
-<script>(function(){try{var p=localStorage.getItem('starshop_theme_v1')||'auto';var d=p==='dark'||(p==='auto'&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.setAttribute('data-theme',d?'dark':'light')}catch(e){}})();</script>
+<script>(function(){try{
+  var p=localStorage.getItem('starshop_theme_v1')||'auto';
+  var d=p==='dark'||(p==='auto'&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.setAttribute('data-theme',d?'dark':'light');
+  var skin=localStorage.getItem('starshop_skin_v1')||'classic';
+  if(skin!=='classic') document.documentElement.setAttribute('data-skin',skin);
+  var bg=localStorage.getItem('starshop_bg_v1');
+  if(bg){ document.documentElement.style.setProperty('--pendingBg', 'url("'+bg+'")'); }
+}catch(e){}})();</script>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#F2F2F7">
 <link rel="icon" href="icon-192.png">
@@ -29,6 +37,7 @@
   --chipBg:rgba(255,255,255,.5); --insightBg:rgba(255,255,255,.12);
   --inputBg:rgba(255,255,255,.16); --inputBorder:rgba(255,255,255,.55);
   --glow:rgba(30,150,255,.55); --glossHi:rgba(255,255,255,.55);
+  --hue:0deg;
 }
 :root[data-theme="dark"]{
   --bg:#0a0f1c; --surface:#141b2b;
@@ -43,7 +52,7 @@
   --inputBg:rgba(255,255,255,.07); --inputBorder:rgba(255,255,255,.18);
   --glow:rgba(80,180,255,.75); --glossHi:rgba(255,255,255,.18);
 }
-:root[data-theme="dark"] body::before{opacity:.85;
+:root[data-theme="dark"] body::before{opacity:.85;filter:blur(50px) saturate(170%) hue-rotate(var(--hue));
   background:
     radial-gradient(circle at 12% 8%, rgba(255,170,90,.22), transparent 32%),
     radial-gradient(circle at 82% 4%, rgba(255,200,120,.18), transparent 30%),
@@ -55,13 +64,18 @@
 }
 :root[data-theme="dark"] body::after{opacity:.12}
 :root[data-theme="dark"] .glass::before{opacity:.18}
+:root[data-skin="ocean"]{ --hue:150deg; --blue:#0098C7; --blueDark:#007099; --glow:rgba(0,180,210,.55); }
+:root[data-skin="sunset"]{ --hue:-35deg; --blue:#FF6A3D; --blueDark:#E8541F; --glow:rgba(255,120,60,.55); }
+:root[data-skin="forest"]{ --hue:95deg; --blue:#2E9E57; --blueDark:#1F7A40; --glow:rgba(40,180,90,.55); }
+:root[data-skin="royal"]{ --hue:250deg; --blue:#7C5CFF; --blueDark:#5E3DE0; --glow:rgba(130,90,255,.55); }
+:root[data-skin="rose"]{ --hue:-150deg; --blue:#FF4FA0; --blueDark:#E6327F; --glow:rgba(255,80,150,.55); }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;background-image:var(--pendingBg,none);background-size:cover;background-position:center;background-attachment:fixed}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",Inter,system-ui,sans-serif;
   color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   background:var(--bg);background-attachment:fixed;overflow-x:hidden;position:relative;
 }
-body::before{content:"";position:fixed;inset:-10%;z-index:0;pointer-events:none;filter:blur(50px) saturate(170%);opacity:1;
+body::before{content:"";position:fixed;inset:-10%;z-index:0;pointer-events:none;filter:blur(50px) saturate(170%) hue-rotate(var(--hue));opacity:1;
   background:
     radial-gradient(circle at 12% 8%, rgba(255,170,90,.7), transparent 32%),
     radial-gradient(circle at 82% 4%, rgba(255,200,120,.65), transparent 30%),
@@ -74,6 +88,9 @@ body::before{content:"";position:fixed;inset:-10%;z-index:0;pointer-events:none;
 body::after{content:"";position:fixed;right:-8%;bottom:-8%;width:70vmin;height:70vmin;z-index:0;pointer-events:none;
   background:url('logo-badge.png') center/contain no-repeat;opacity:.07;filter:saturate(120%);
 }
+body.hasCustomBg::before,body.hasCustomBg::after{display:none}
+body.hasCustomBg{background-size:cover;background-position:center;background-repeat:no-repeat}
+body.hasCustomBg .app::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:var(--bg);opacity:.42}
 .app{max-width:900px;margin:auto;padding:12px 14px 96px;position:relative;z-index:1;
   transition:transform .38s var(--ease);transform-origin:center 30%}
 body.modalOpen .app{transform:scale(1.045)}
@@ -283,6 +300,12 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
   box-shadow:0 4px 12px rgba(31,38,60,.08),inset 0 1px 0 var(--glossHi)}
 .themeOptBtn:active{transform:scale(.95)}
 .themeOptBtn.active{background:var(--blue);color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(0,122,255,.4),inset 0 1px 0 rgba(255,255,255,.4)}
+.skinGrid{display:flex;gap:8px;flex-wrap:wrap}
+.skinSwatch{border:1px solid var(--glassBorder);background:var(--glass);color:var(--text2);padding:8px 12px 8px 8px;border-radius:999px;
+  font-weight:600;font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:transform .12s var(--spring),border-color .15s}
+.skinSwatch:active{transform:scale(.95)}
+.skinSwatch.active{border-color:var(--blue);color:var(--text);box-shadow:0 0 0 2px var(--blue) inset}
+.skinDot{width:20px;height:20px;border-radius:50%;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
 </style>
 </head>
 <body>
@@ -389,6 +412,24 @@ td input:focus,td select:focus{box-shadow:none;background:transparent;outline:no
 <button type="button" class="themeOptBtn" data-theme="dark" onclick="setTheme('dark')">🌙 Night</button>
 <button type="button" class="themeOptBtn" data-theme="auto" onclick="setTheme('auto')">🌗 Automatic</button>
 </div>
+<p style="margin-top:14px;margin-bottom:6px;font-weight:600;font-size:13.5px;color:var(--text2)">Color Skin</p>
+<div class="skinGrid">
+<button type="button" class="skinSwatch" data-skin="classic" onclick="setSkin('classic')"><span class="skinDot" style="background:linear-gradient(135deg,#ffb36b,#6fb3ff)"></span>Classic</button>
+<button type="button" class="skinSwatch" data-skin="ocean" onclick="setSkin('ocean')"><span class="skinDot" style="background:linear-gradient(135deg,#5fd0ff,#0070a0)"></span>Ocean</button>
+<button type="button" class="skinSwatch" data-skin="sunset" onclick="setSkin('sunset')"><span class="skinDot" style="background:linear-gradient(135deg,#ffd27a,#ff5b3d)"></span>Sunset</button>
+<button type="button" class="skinSwatch" data-skin="forest" onclick="setSkin('forest')"><span class="skinDot" style="background:linear-gradient(135deg,#9be58a,#1f7a40)"></span>Forest</button>
+<button type="button" class="skinSwatch" data-skin="royal" onclick="setSkin('royal')"><span class="skinDot" style="background:linear-gradient(135deg,#c3a9ff,#5e3de0)"></span>Royal</button>
+<button type="button" class="skinSwatch" data-skin="rose" onclick="setSkin('rose')"><span class="skinDot" style="background:linear-gradient(135deg,#ffc3dd,#e6327f)"></span>Rose</button>
+</div>
+</div>
+<div class="section glass"><h2>🖼️ Custom Background</h2>
+<p>Use your own photo as the app background — pick one from your device, or paste a link to an image online. This replaces the Color Skin above until you remove it.</p>
+<label class="filebtn small" style="display:inline-flex"><span class="iconBadge green">📁</span>Choose from device<input type="file" accept="image/*" hidden onchange="pickCustomBgFile(this)"></label>
+<div style="display:flex;gap:8px;margin-top:10px">
+<input type="text" id="bgUrlInput" placeholder="Paste image link (https://...)" style="flex:1;max-width:none;padding:9px 10px;border-radius:10px;border:1px solid var(--inputBorder);background:var(--inputBg);color:var(--text);font-size:14px">
+<button type="button" class="filebtn small" onclick="useCustomBgUrl()">⬇️ Use</button>
+</div>
+<button type="button" id="removeBgBtn" class="clearBtn small" style="margin-top:10px;display:none" onclick="clearCustomBg()">🗑️ Remove Background</button>
 </div>
 <div class="section glass"><h2>🔒 Privacy Lock</h2>
 <p>Set a PIN to lock History and all Profit figures. Once set, you'll need this PIN to open History or view any profit number, on this device.</p>
@@ -485,6 +526,46 @@ function applyTheme(){
 function setTheme(pref){ try{localStorage.setItem(THEME_KEY,pref)}catch(e){} applyTheme(); }
 function cycleTheme(){ const order=['light','dark','auto']; const cur=getThemePref(); setTheme(order[(order.indexOf(cur)+1)%order.length]); }
 if(window.matchMedia){ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ()=>{ if(getThemePref()==='auto') applyTheme(); }); }
+const SKIN_KEY='starshop_skin_v1';
+const SKINS=[
+  {id:'classic',label:'Classic',dot:'linear-gradient(135deg,#ffb36b,#6fb3ff)'},
+  {id:'ocean',label:'Ocean',dot:'linear-gradient(135deg,#5fd0ff,#0070a0)'},
+  {id:'sunset',label:'Sunset',dot:'linear-gradient(135deg,#ffd27a,#ff5b3d)'},
+  {id:'forest',label:'Forest',dot:'linear-gradient(135deg,#9be58a,#1f7a40)'},
+  {id:'royal',label:'Royal',dot:'linear-gradient(135deg,#c3a9ff,#5e3de0)'},
+  {id:'rose',label:'Rose',dot:'linear-gradient(135deg,#ffc3dd,#e6327f)'},
+];
+function getSkinPref(){try{return localStorage.getItem(SKIN_KEY)||'classic'}catch(e){return 'classic'}}
+function applySkin(){
+  const skin=getSkinPref();
+  if(skin==='classic') document.documentElement.removeAttribute('data-skin');
+  else document.documentElement.setAttribute('data-skin',skin);
+  document.querySelectorAll('.skinSwatch').forEach(x=>x.classList.toggle('active',x.dataset.skin===skin));
+}
+function setSkin(id){ try{localStorage.setItem(SKIN_KEY,id)}catch(e){} applySkin(); }
+const BG_KEY='starshop_bg_v1';
+function applyCustomBg(){
+  let bg=null; try{bg=localStorage.getItem(BG_KEY)}catch(e){}
+  if(bg){ document.body.style.backgroundImage="url('"+bg+"')"; document.body.classList.add('hasCustomBg'); }
+  else{ document.body.style.backgroundImage=''; document.body.classList.remove('hasCustomBg'); }
+  const btn=document.getElementById('removeBgBtn'); if(btn) btn.style.display=bg?'inline-flex':'none';
+}
+function setCustomBgFromDataUrl(dataUrl){ try{localStorage.setItem(BG_KEY,dataUrl)}catch(e){ appAlert('That image is too large to store. Try a smaller photo.'); return; } applyCustomBg(); flashToast('🖼️ Background updated'); }
+async function pickCustomBgFile(input){
+  const f=input.files&&input.files[0]; if(!f) return;
+  if(!f.type.startsWith('image/')){ appAlert('Please choose an image file.'); return; }
+  const reader=new FileReader();
+  reader.onload=()=>setCustomBgFromDataUrl(reader.result);
+  reader.onerror=()=>appAlert('Could not read that image.');
+  reader.readAsDataURL(f);
+  input.value='';
+}
+async function useCustomBgUrl(){
+  const el=document.getElementById('bgUrlInput'); const url=(el.value||'').trim();
+  if(!url){ appAlert('Paste an image link first.'); return; }
+  setCustomBgFromDataUrl(url); el.value='';
+}
+function clearCustomBg(){ try{localStorage.removeItem(BG_KEY)}catch(e){} applyCustomBg(); flashToast('Background reset'); }
 const PIN_KEY='starshop_pin_v1';
 let profitUnlocked=false;
 function getPin(){try{return localStorage.getItem(PIN_KEY)||''}catch(e){return ''}}
@@ -762,6 +843,8 @@ async function init(){
   render();
   applyLockUI();
   applyTheme();
+  applySkin();
+  applyCustomBg();
   armBackGuard();
   initFirebaseSync();
   const flushNow=()=>{ if(unsaved) manualSave(); };
